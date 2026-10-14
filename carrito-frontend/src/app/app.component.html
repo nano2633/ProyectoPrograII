@@ -1,0 +1,78 @@
+<!-- Barra de navegación -->
+<div style="background-color: #2c3e50; padding: 15px; color: white; display: flex; gap: 20px;">
+  <button (click)="cargarCatalogo()" style="padding: 10px; cursor: pointer; background: #34495e; color: white; border: none; border-radius: 4px;">
+    Ver Catálogo
+  </button>
+  <button (click)="verCarrito()" style="padding: 10px; cursor: pointer; background: #e67e22; color: white; border: none; border-radius: 4px;">
+    Ver Mi Carrito
+  </button>
+</div>
+
+<!-- Pantalla del catálogo -->
+@if (vistaActual === 'catalogo') {
+  <h1 style="padding: 20px;">Catálogo de Productos</h1>
+  <div style="display: flex; gap: 20px; flex-wrap: wrap; padding: 0 20px;">
+    @for (producto of productos; track producto.idProducto) {
+      <div style="border: 1px solid #ccc; padding: 15px; border-radius: 8px; width: 220px; text-align: center;">
+        <img [src]="producto.imagen" alt="Imagen" style="width: 100%; max-height: 150px; object-fit: contain;">
+        <h3>{{ producto.nombre }}</h3>
+        <p style="color: #666;">Código: {{ producto.codigo }}</p>
+        <p style="font-weight: bold; font-size: 1.2rem;">Q{{ producto.precio }}</p>
+        <button (click)="agregarProducto(producto.idProducto)" style="padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+          Agregar al carrito
+        </button>
+      </div>
+    }
+  </div>
+}
+
+<!-- Pantalla del carrito -->
+@if (vistaActual === 'carrito') {
+  <h1 style="padding: 20px;">Mi Carrito de Compras</h1>
+  <div style="padding: 0 20px;">
+    
+    <!-- Verificamos si el carrito está vacío o no y mostramos el contenido correspondiente -->
+    @if (itemsCarrito.length === 0) {
+      <p style="font-size: 1.2rem; color: #7f8c8d;">Tu carrito está vacío.</p>
+    } @else {
+      <table style="width: 100%; border-collapse: collapse; text-align: left; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <thead>
+          <tr style="background-color: #f8f9fa; border-bottom: 2px solid #ddd;">
+            <th style="padding: 15px;">Imagen</th>
+            <th style="padding: 15px;">Producto</th>
+            <th style="padding: 15px;">Precio Unitario</th>
+            <th style="padding: 15px;">Cantidad</th>
+            <th style="padding: 15px;">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Iteramos sobre los productos en el carrito y mostramos sus detalles en la tabla -->
+          @for (item of itemsCarrito; track item.idsc) {
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 15px;">
+                <img [src]="item.imagen" alt="img" style="width: 60px; height: 60px; object-fit: contain;">
+              </td>
+              <td style="padding: 15px; font-weight: bold; color: #2c3e50;">{{ item.nombre }}</td>
+              <td style="padding: 15px;">Q{{ item.precio }}</td>
+              <td style="padding: 15px;">{{ item.cantidad }}</td>
+              <td style="padding: 15px; font-weight: bold; color: #27ae60;">Q{{ item.subTotal }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <!-- Fila del Gran Total -->
+      <div style="margin-top: 20px; text-align: right; padding: 15px; background: #ecf0f1; border-radius: 5px;">
+        <span style="font-size: 1.2rem; color: #34495e;">Total a Pagar: </span> 
+        <strong style="font-size: 1.5rem; color: #c0392b;">Q{{ totalCarrito | number:'1.2-2' }}</strong>
+      </div>
+
+      <!-- Botón para vaciar el carrito -->
+      <div style="margin-top: 20px; text-align: right;">
+        <button (click)="vaciarCarrito()" style="padding: 10px; background-color: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer;">
+          Vaciar Carrito
+        </button>
+      </div>
+    }
+  </div>
+}
